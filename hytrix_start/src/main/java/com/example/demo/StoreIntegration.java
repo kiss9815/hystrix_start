@@ -15,7 +15,9 @@ public class StoreIntegration {
         //do stuff that might fail
 
     	System.out.println("getStores");
-
+    	
+    	Thread.sleep(1000);
+    	
     	if("ee".equals("ee")){
 			throw new Exception(); // 예외가 생길 부분에 try catch 로 처리되면 fallback 으로 안감!! fallback 되려면 catch 문에 예외 던져야 함
 		}
