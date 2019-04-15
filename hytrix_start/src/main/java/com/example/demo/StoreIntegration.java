@@ -1,16 +1,23 @@
 package com.example.demo;
 
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Component
 public class StoreIntegration {
 	
 	//hystix 어노테이션을 쓴 부분에서만 예외처리가 됨
-    @HystrixCommand(commandKey="getStores", fallbackMethod = "defaultStores")
+    @HystrixCommand(commandKey="getStores", fallbackMethod = "defaultStores", 
+    		commandProperties = {
+    		   @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
+    		   @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "10000"),
+    		   @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
+    		   @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
+    		   @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000")
+    		}, 
+	threadPoolProperties = @HystrixProperty(name = "coreSize", value = "100"))
     public Object getStores(String parameter) throws Exception {
         //do stuff that might fail
 
